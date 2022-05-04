@@ -422,11 +422,12 @@ def normalize_address(address):
     return cleaned_data
 
 
-def _format_address_line(line_format, address, rules):
+def _format_address_line(line_format, address, rules, ignore_upper_fields):
     def _get_field(name):
         value = address.get(name, "")
-        if name in rules.upper_fields:
-            value = value.upper()
+        if not ignore_upper_fields:
+            if name in rules.upper_fields:
+                value = value.upper()
         return value
 
     replacements = {
@@ -461,12 +462,12 @@ def get_field_order(address, latin=False):
     return all_lines
 
 
-def format_address(address, latin=False, country_name=True, separator="\n"):
+def format_address(address, latin=False, country_name=True, separator="\n", ignore_upper_fields=False):
     rules = get_validation_rules(address)
     address_format = rules.address_latin_format if latin else rules.address_format
     address_line_formats = address_format.split("%n")
     address_lines = [
-        _format_address_line(lf, address, rules) for lf in address_line_formats
+        _format_address_line(lf, address, rules, ignore_upper_fields) for lf in address_line_formats
     ]
     if country_name:
         address_lines.append(rules.country_name if country_name == True else country_name)	

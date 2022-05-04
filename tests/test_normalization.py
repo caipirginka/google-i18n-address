@@ -167,6 +167,20 @@ def test_address_formatting_with_parameters():
         'CHINA')
 
 
+def test_address_formatting_ignoring_upper_fields():
+    address = {
+        'country_code': 'IT',
+        'postal_code': '21047',
+        'city': 'Saronno',
+        'country_area': 'VA',
+        'street_address': 'Via Monte Generoso, 1'}
+    result = format_address(address, latin=False, country_name=False, ignore_upper_fields=True)
+    assert result == (
+        'Via Monte Generoso, 1\n'
+        '21047\n'
+        'Saronno VA')
+
+
 def test_capitalization():
     address = normalize_address({
         'country_code': 'GB',
