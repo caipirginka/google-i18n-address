@@ -461,16 +461,17 @@ def get_field_order(address, latin=False):
     return all_lines
 
 
-def format_address(address, latin=False):
+def format_address(address, latin=False, country_name=True, separator="\n"):
     rules = get_validation_rules(address)
     address_format = rules.address_latin_format if latin else rules.address_format
     address_line_formats = address_format.split("%n")
     address_lines = [
         _format_address_line(lf, address, rules) for lf in address_line_formats
     ]
-    address_lines.append(rules.country_name)
+    if country_name:
+        address_lines.append(rules.country_name if country_name == True else country_name)	
     address_lines = filter(None, address_lines)
-    return "\n".join(address_lines)
+    return separator.join(address_lines)
 
 
 def latinize_address(address, normalized=False):

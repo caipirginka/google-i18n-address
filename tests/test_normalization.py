@@ -126,6 +126,47 @@ def test_address_formatting():
         'CHINA')
 
 
+def test_address_formatting_with_parameters():
+    address = {
+        'country_code': 'CN',
+        'country_area': '云南省',
+        'postal_code': '677400',
+        'city': '临沧市',
+        'city_area': '凤庆县',
+        'street_address': '中关村东路1号'}
+    result = format_address(address, latin=False, country_name=False)
+    assert result == (
+        '677400\n'
+        '云南省临沧市凤庆县\n'
+        '中关村东路1号')
+    address = {
+        'country_code': 'CN',
+        'country_area': '云南省',
+        'postal_code': '677400',
+        'city': '临沧市',
+        'city_area': '凤庆县',
+        'street_address': '中关村东路1号'}
+    result = format_address(address, latin=False, country_name='An asian country')
+    assert result == (
+        '677400\n'
+        '云南省临沧市凤庆县\n'
+        '中关村东路1号\n'
+        'An asian country')
+    address = {
+        'country_code': 'CN',
+        'country_area': '云南省',
+        'postal_code': '677400',
+        'city': '临沧市',
+        'city_area': '凤庆县',
+        'street_address': '中关村东路1号'}
+    result = format_address(address, latin=False, separator=', ')
+    assert result == (
+        '677400, '
+        '云南省临沧市凤庆县, '
+        '中关村东路1号, '
+        'CHINA')
+
+
 def test_capitalization():
     address = normalize_address({
         'country_code': 'GB',
